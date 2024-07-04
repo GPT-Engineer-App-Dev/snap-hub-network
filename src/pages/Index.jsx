@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -7,6 +8,25 @@ const Index = () => {
     const storedPhotos = JSON.parse(localStorage.getItem("photos")) || [];
     setPhotos(storedPhotos);
   }, []);
+
+  const handleLike = (index) => {
+    const updatedPhotos = [...photos];
+    if (!updatedPhotos[index].likes) {
+      updatedPhotos[index].likes = 0;
+    }
+    updatedPhotos[index].likes += 1;
+    localStorage.setItem("photos", JSON.stringify(updatedPhotos));
+    setPhotos(updatedPhotos);
+  };
+
+  const handleUnlike = (index) => {
+    const updatedPhotos = [...photos];
+    if (updatedPhotos[index].likes > 0) {
+      updatedPhotos[index].likes -= 1;
+      localStorage.setItem("photos", JSON.stringify(updatedPhotos));
+      setPhotos(updatedPhotos);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -22,10 +42,14 @@ const Index = () => {
               </div>
             </div>
             <img src={photo.photo} alt="Photo" className="mx-auto object-cover w-full h-64" />
-            <div className="mt-4">
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <div className="mt-4 flex items-center space-x-4">
+              <Button onClick={() => handleLike(index)} variant="outline">
                 Like
-              </button>
+              </Button>
+              <Button onClick={() => handleUnlike(index)} variant="outline">
+                Unlike
+              </Button>
+              <span>{photo.likes || 0} Likes</span>
             </div>
             <div className="mt-4">
               <h3 className="text-lg mb-2">Comments</h3>
