@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Profile = () => {
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    const storedPhotos = JSON.parse(localStorage.getItem("photos")) || [];
+    setPhotos(storedPhotos);
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col items-center">
@@ -9,10 +16,9 @@ const Profile = () => {
         <p className="text-gray-600">This is the user's bio.</p>
       </div>
       <div className="grid grid-cols-3 gap-4 mt-6">
-        <img src="/placeholder.svg" alt="Photo" className="mx-auto object-cover w-full h-48" />
-        <img src="/placeholder.svg" alt="Photo" className="mx-auto object-cover w-full h-48" />
-        <img src="/placeholder.svg" alt="Photo" className="mx-auto object-cover w-full h-48" />
-        {/* Add more photos as needed */}
+        {photos.map((photo, index) => (
+          <img key={index} src={photo.photo} alt="Photo" className="mx-auto object-cover w-full h-48" />
+        ))}
       </div>
     </div>
   );
